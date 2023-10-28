@@ -15,8 +15,9 @@ class DictionaryTopKStrategy(TopKStrategy, ABC):
         for num in nums:
             k_frequencies[num] = k_frequencies.get(num, 0) + 1
 
-        sorted_k_frequencies = sorted(k_frequencies.values(), key=lambda item: item)
-        return sorted_k_frequencies[:k]
+        items = k_frequencies.items()
+        sorted_k_frequencies = sorted(items, key=lambda item: item[1], reverse=True)[:k]
+        return list(dict(sorted_k_frequencies).keys())
 
 
 class Solution:
