@@ -45,21 +45,23 @@ class HeapQueueTopKStrategy(TopKStrategy, ABC):
 class BucketSortTopKStrategy(TopKStrategy, ABC):
     def solve(self, nums: List[int], k: int) -> List[int]:
         k_frequencies = {}
-        buckets = [[] for _ in range(len(nums)+1)]
+        buckets = [None] * (len(nums) + 1)
         for num in nums:
             k_frequencies[num] = k_frequencies.get(num, 0) + 1
 
         for num, freq in k_frequencies.items():
+            if buckets[freq] is None:
+                buckets[freq] = []
+
             buckets[freq].append(num)
 
         top_k = []
-        for bucket in range(len(buckets)-1, -1, -1):
-            for val in buckets[bucket]:
-                top_k.append(val)
-                if len(top_k) == k:
-                    return top_k
-
-        return top_k
+        for bucket in reversed(buckets):
+            if bucket:
+                for num in bucket:
+                    top_k.append(num)
+                    if len(top_k) == k:
+                        return top_k
 
 
 class Solution:
