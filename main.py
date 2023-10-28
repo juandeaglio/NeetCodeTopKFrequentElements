@@ -10,7 +10,13 @@ class TopKStrategy(Protocol):
 
 class DictionaryTopKStrategy(TopKStrategy, ABC):
     def solve(self, nums: List[int], k: int) -> List[int]:
-        pass
+        k_frequencies = {}
+
+        for num in nums:
+            k_frequencies[num] = k_frequencies.get(num, 0) + 1
+
+        sorted_k_frequencies = sorted(k_frequencies.values(), key=lambda item: item)
+        return sorted_k_frequencies[:k]
 
 
 class Solution:
